@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
-import app.models 
-
-# Import routers (we'll create these next)
-# from app.routers import songs, artists, recommend, analytics, auth
+import app.models
+from app.routers import songs, artists
 
 app = FastAPI(
     title="Music Recommendation API",
@@ -20,6 +18,9 @@ app.add_middleware(
 )
 
 Base.metadata.create_all(bind=engine)
+
+app.include_router(songs.router)
+app.include_router(artists.router)
 
 @app.get("/")
 def root():
